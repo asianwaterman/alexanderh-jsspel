@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script src="https://koda.nu/simple.js">
+
+  
+  
+        var player = {x: 100, y: 100, size: 40, speed: 7}; /* skapar en variabel med flera värden för spelaren med startkordinater, storlek och hastighet*/
+        var zombies = []; /* tom lista */
+        
+        var i = 0; /* ger variabeln i värdet 0 */
+        
+        while (i < 25) /* medans i är mindre än 25 kommer det att spawnas zombies och för varje zombie går i upp med 1. När i blir 25 stoppas det.*/
+        {
+          zombies.push({x: random(totalWidth), /* zombiesarna får en slumpmässig start y- och x-kordinat samt slumpat hastighet */
+                        y: random(totalHeight),
+                        speed: random(4,7)});
+          i += 1;
+         }
+        
+        function update() /* allt innanför update funktionen upprepas tills det kommer stopUpdate*/
+        {
+          
+          clearScreen();
+          text(50, 20, 20, "Sprint with SPACE!", "black"); /*  skapar text för ett ge instruktioner*/
+          
+          
+          picture(player.x, player.y, "https://64.media.tumblr.com/avatar_e3b30a50adad_128.pnj"); /* skapar variabeln player i form av en bild*/
+          
+          
+          if (keyboard.space & keyboard.w) /* det är gjort som en sprint, om du håller in både space och en gå knapp ökar hastigheten*/
+            player.y -= 9
+          if (keyboard.space & keyboard.s) 
+            player.y += 9
+          if (keyboard.space & keyboard.a) 
+             player.x -= 9
+          if (keyboard.space & keyboard.d)
+            player.x += 9
+          
+          
+          if (keyboard.w) /* när du inte håller in space blir hastigheten normal*/
+            player.y -= player.speed;
+          if (keyboard.s)
+            player.y += player.speed;
+          if (keyboard.a)
+            player.x -= player.speed;
+          if (keyboard.d)
+            player.x += player.speed;  
+      
+          
+          var i = 0;
+          
+          while (i < 25)
+          {
+            var zombie = zombies[i];
+            
+            picture(zombie.x, zombie.y, "http://spelprogrammering.nu/bilder/zombie.png");/* manifesterar zombie som en bild*/
+          
+            if (zombie.x < player.x)  /* detta gör så om spelaren har mindre eller större x- eller y-kordinat kommer zombiernas x- och y-kordinater att öka eller minska beroende på var spelaren är.*/
+              zombie.x += zombie.speed;
+            else
+              zombie.x -= zombie.speed;
+             
+            if (zombie.y < player.y)
+              zombie.y += zombie.speed;
+            else
+              zombie.y -= zombie.speed;
+          
+            if (distance(player, zombie) < 5) /* om en zombie kommer inom 5 pixlar så tar spelet slut med text och update funktionen slutar*/
+            {
+              text(300, 50, 40, "Game over!", "red");
+              stopUpdate();
+            
+            }
+            
+            i += 1;
+          }
+          
+        }
+      
+      </script>
+    
+</body>
+</html>
